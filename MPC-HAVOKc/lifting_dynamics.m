@@ -19,7 +19,10 @@ function [F_eta, Fu, F0, b,F_r] =lifting_dynamics(Av,Bv,Pup,Pdown,nd,r, Hp,Hc,nu
 
 n=size(Av,1); %Number of states
 
-Cc=[zeros(ny,nd-1),ones(ny,1)]; %No idea if Cc is correct 
+Cc=[zeros(1,nd),1]; %No idea if Cc is correct 
+
+%Cc=[ones(1,1),zeros(1,nd-1)];
+
 An=[Av, zeros(n,ny);Cc*Pup*Av, eye(ny) ];
 Bn=[Bv; Cc*Pup*Bv]; 
 
@@ -47,8 +50,8 @@ end
 Fu=zeros(size(F_eta,1),nu*Hc); %Was zeros(size(F_eta,1),nu*size(F_eta,2)-RowAn);
 % Making the BnPdownI_i
 Bnu=[];
-for i=1:nd
-    Bnu=[Bnu;Bn*Pdown*[zeros(i-1,nu);1;zeros(nd-i,nu)]];
+for i=1:nd+1
+    Bnu=[Bnu;Bn*Pdown*[zeros(i-1,nu);1;zeros(nd+1-i,nu)]];
 end 
 
 %First the "diagnoal" is made consisting of Bn*Pdown*Ik
@@ -78,7 +81,7 @@ Fu=Fu(1:size(F_eta,1),:);
 %% Making F_0 
 
 %First D, is design 
-D=zeros(nd,nd); 
+D=zeros(nd+1,nd+1); 
 
 %Making the off diagonal one: 
 for i=2:nd
@@ -96,13 +99,16 @@ end
 b=[-eta_0;zeros(size(F_eta,1)-size(eta_0,1),1)];
 
 %% Making the refarence change F_r 
-F_r=zeros(size(F_eta,1),0);
+F_r=zeros(size(F_eta,1),1);
+%Making sure Ref is the right dimension! 
+if size(Ref,1)>size(Ref,2)
+    Ref=Ref';
+end 
 
-
-index=1; 
-for i=RowAn+r+1:RowAn:size(F_eta,1)-RowAn
-    F_r(i:i+r-1,1)=Ref(1,index:index+r-1);
-    index=index+r;
+index=ny+1; 
+for i=RowAn+r+1:RowAn:size(F_eta,1)%-RowAn%i=RowAn+r+1:RowAn:size(F_eta,1)%-RowAn
+    F_r(i:i+ny-1,1)=Ref(1,index:index+ny-1);
+    index=index+ny;
 end 
 
 

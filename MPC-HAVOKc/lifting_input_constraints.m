@@ -1,9 +1,11 @@
-function [F,f1,fLift] =lifting_input_constraints(Hc,Fis,f)
+function [F,f1,fLift] =lifting_input_constraints(Hp,Fis,f)
 
 %First the matrix Fi (with i*nu-nu:i*nu being the colums corresponding to
 %the time i) 
 
-Fi=zeros(Hc*size(Fis,1),Hc*size(Fis,2));
+%Fi=zeros(Hc*size(Fis,1),Hc*size(Fis,2));
+Fi=zeros(Hp*size(Fis,1),Hp*size(Fis,2));
+
 indexCol=1;
 for i=1:size(Fis,1):size(Fi,1)
     Fi(i:i+size(Fis,1)-1,indexCol:indexCol+size(Fis,2)-1)=Fis;

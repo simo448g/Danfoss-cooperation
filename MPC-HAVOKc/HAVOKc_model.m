@@ -1,4 +1,4 @@
-function [Av, Bv, Pup, Pdown,S] =HAVOKc_model(x,u,nd,r)
+function [Av, Bv, Pup, Pdown,S,Sr] =HAVOKc_model(x,u,nd,r)
 %x=data
 %u=inputs 
 %nd=embedding length 
@@ -16,16 +16,16 @@ function [Av, Bv, Pup, Pdown,S] =HAVOKc_model(x,u,nd,r)
 %measured values/states: 
 index=1;
 n=size(x,1); %Determine the amount of states 
-for i=0:nd-1
-    H(index:index+n-1,:)=x(:,nd-i:end-i);
+for i=0:nd
+    H(index:index+n-1,:)=x(:,nd-i+1:end-i);
     index=index+n;
 end
 %input
 index=1;
 nu=size(u,1); %Determine the amount of states 
 
-for i=0:nd-1
-    Hu(index:index+nu-1,:)=u(:,nd-i:end-i);
+for i=0:nd
+    Hu(index:index+nu-1,:)=u(:,nd-i+1:end-i);
     index=index+nu;
 end
 

@@ -81,7 +81,7 @@ Fu=Fu(1:size(F_eta,1),:);
 %% Making F_0 
 
 %First D, is design 
-D=zeros(nd+1,nd+1); 
+D=zeros((nd+1)*nu,(nd+1)*nu); 
 
 %Making the off diagonal one: 
 for i=2:nd
